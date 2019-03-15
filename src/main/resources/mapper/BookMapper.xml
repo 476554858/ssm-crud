@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.crud.dao.BookMapper">
+  <resultMap id="BaseResultMap" type="com.atguigu.crud.bean.Book">
+    <id column="bid" jdbcType="CHAR" property="bid" />
+    <result column="bname" jdbcType="VARCHAR" property="bname" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="cid" jdbcType="CHAR" property="cid" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    bid, bname, price, author, image, cid
+  </sql>
+  <select id="selectByExample" parameterType="com.atguigu.crud.bean.BookExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from book
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from book
+    where bid = #{bid,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from book
+    where bid = #{bid,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.atguigu.crud.bean.BookExample">
+    delete from book
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.atguigu.crud.bean.Book">
+    insert into book (bid, bname, price, 
+      author, image, cid)
+    values (#{bid,jdbcType=CHAR}, #{bname,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
+      #{author,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, #{cid,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.atguigu.crud.bean.Book">
+    insert into book
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bid != null">
+        bid,
+      </if>
+      <if test="bname != null">
+        bname,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="author != null">
+        author,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+      <if test="cid != null">
+        cid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bid != null">
+        #{bid,jdbcType=CHAR},
+      </if>
+      <if test="bname != null">
+        #{bname,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="author != null">
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="cid != null">
+        #{cid,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.atguigu.crud.bean.BookExample" resultType="java.lang.Long">
+    select count(*) from book
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update book
+    <set>
+      <if test="record.bid != null">
+        bid = #{record.bid,jdbcType=CHAR},
+      </if>
+      <if test="record.bname != null">
+        bname = #{record.bname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.author != null">
+        author = #{record.author,jdbcType=VARCHAR},
+      </if>
+      <if test="record.image != null">
+        image = #{record.image,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cid != null">
+        cid = #{record.cid,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update book
+    set bid = #{record.bid,jdbcType=CHAR},
+      bname = #{record.bname,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DECIMAL},
+      author = #{record.author,jdbcType=VARCHAR},
+      image = #{record.image,jdbcType=VARCHAR},
+      cid = #{record.cid,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.atguigu.crud.bean.Book">
+    update book
+    <set>
+      <if test="bname != null">
+        bname = #{bname,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="author != null">
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="cid != null">
+        cid = #{cid,jdbcType=CHAR},
+      </if>
+    </set>
+    where bid = #{bid,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.atguigu.crud.bean.Book">
+    update book
+    set bname = #{bname,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      author = #{author,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR},
+      cid = #{cid,jdbcType=CHAR}
+    where bid = #{bid,jdbcType=CHAR}
+  </update>
+</mapper>
